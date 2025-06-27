@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="Home.css"> <link rel="stylesheet" href="header.css"> <style>
+        /* Cart Specific Styles */
+        .cart-container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fefefe;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .cart-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #3A59D1;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-right: 20px;
+            border-radius: 5px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-details h3 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .cart-item-details p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .cart-item-details strong {
+            font-size: 1.1em;
+            color: #000;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .cart-summary {
+            text-align: right;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .cart-summary p {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .buy-now-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .buy-now-btn:hover {
+            background-color: #218838;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            font-size: 1.2em;
+            color: #777;
+            padding: 50px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="cart-container">
+        <h2>Your Shopping Cart</h2>
+        <div id="cart-items-list">
+            </div>
+        <div id="empty-cart-text" class="empty-cart-message" style="display: none;">Your cart is empty.</div>
+        <div class="cart-summary">
+            <p>Total: $<span id="cart-total">0.00</span></p>
+            <button class="buy-now-btn" id="buy-now-btn">Buy Now</button>
+        </div>
+    </div>
+
+    <script>
+        fetch("header.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("header-placeholder").innerHTML = data;
+
+                // --- Common header JS ---
+                const toggle = document.getElementById("category-toggle");
+                const menu = document.getElementById("category-menu");
+                toggle?.addEventListener("click", () => {
+                    menu.style.display = menu.style.display === "block" ? "none" : "block";
+                });
+                document.addEventListener("click", (e) => {
+                    if (!document.getElementById("category").contains(e.target)) {
+                        menu.style.display = "none";
+                    }
+                });
+
+                // Update cart count in header
+                const cartCountSpan = document.getElementById('cart-count');
+                let cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+                if (cartCountSpan) {
+                    cartCountSpan.textContent = cart.length;
+                }
+                // --- End Common header JS ---
+            });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartItemsList = document.getElementById('cart-items-list');
+            const cartTotalSpan = document.getElementById('cart-total');
+            const emptyCartText = document.getElementById('empty-cart-text');
+            const buyNowBtn = document.getElementById('buy-now-btn');
+
+            let cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+
+            function renderCart() {
+                cartItemsList.innerHTML = ''; // Clear existing items
+                let total = 0;
+
+                if (cart.length === 0) {
+                    emptyCartText.style.display = 'block';
+                    cartItemsList.style.display = 'none';
+                    buyNowBtn.disabled = true; // Disable buy button if cart is empty
+                } else {
+                    emptyCartText.style.display = 'none';
+                    cartItemsList.style.display = 'block';
+                    buyNowBtn.disabled = false; // Enable buy button
+                    cart.forEach((product, index) => {
+                        const cartItemDiv = document.createElement('div');
+                        cartItemDiv.classList.add('cart-item');
+                        cartItemDiv.innerHTML = `
+                            <img src="${product.image}" alt="${product.name}">
+                            <div class="cart-item-details">
+                                <h3>${product.name}</h3>
+                                <p>Price: <strong>$${product.price.toFixed(2)}</strong></p>
+                            </div>
+                            <button class="delete-btn" data-index="${index}">Delete</button>
+                        `;
+                        cartItemsList.appendChild(cartItemDiv);
+                        total += product.price;
+                    });
+                }
+                cartTotalSpan.textContent = total.toFixed(2);
+
+                // Attach delete event listeners after rendering
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const indexToDelete = parseInt(this.dataset.index);
+                        deleteProductFromCart(indexToDelete);
+                    });
+                });
+            }
+
+            function deleteProductFromCart(index) {
+                cart.splice(index, 1); // Remove item from array
+                localStorage.setItem('shoppingCart', JSON.stringify(cart)); // Update localStorage
+                renderCart(); // Re-render cart
+                // Update header cart count (requires header to be loaded)
+                const headerCartCountSpan = document.getElementById('cart-count');
+                if (headerCartCountSpan) {
+                    headerCartCountSpan.textContent = cart.length;
+                }
+            }
+
+            buyNowBtn.addEventListener('click', function() {
+                if (cart.length > 0) {
+                    alert('Thank you for your purchase! (This is a demo checkout)');
+                    localStorage.removeItem('shoppingCart'); // Clear cart after purchase
+                    cart = []; // Reset cart array
+                    renderCart(); // Update display
+                    // Update header cart count
+                    const headerCartCountSpan = document.getElementById('cart-count');
+                    if (headerCartCountSpan) {
+                        headerCartCountSpan.textContent = 0;
+                    }
+                } else {
+                    alert('Your cart is empty. Please add some products first.');
+                }
+            });
+
+            // Initial render of the cart when the page loads
+            renderCart();
+        });
+    </script>
+</body>
+</html>

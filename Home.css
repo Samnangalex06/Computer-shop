@@ -1,0 +1,183 @@
+.product-row {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    justify-content: center; /* Center items in the row */
+}
+
+.product {
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.product img {
+    width: 100%;
+    height: auto;
+}
+
+.see-all {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Product Detail Modal */
+.product-modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.product-modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%; /* Could be responsive */
+    max-width: 700px;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.product-modal-content img {
+    max-width: 40%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.product-details {
+    flex-grow: 1;
+}
+
+.product-details h3 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.product-details p {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.product-details strong {
+    font-size: 1.5em;
+    color: #3A59D1; /* Matches your header color */
+    display: block;
+    margin-top: 15px;
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Add to Cart Button Style */
+.add-to-cart-btn {
+    background-color: #3D90D7; /* A blue that matches your header */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #2a7dbb;
+}
+
+/* Ensure products take up their space when hidden by search */
+.product[style="display: none;"] {
+    display: none !important;
+}
+
+/* --- Responsive Adjustments --- */
+
+/* For screens smaller than 768px (e.g., tablets and mobile) */
+@media (max-width: 768px) {
+    .product-row {
+        gap: 20px; /* Reduce gap between products */
+    }
+
+    .product {
+        width: 160px; /* Make products slightly smaller */
+    }
+
+    .product-modal-content {
+        flex-direction: column; /* Stack image and details vertically */
+        width: 95%; /* Take more width on small screens */
+        padding: 20px;
+        text-align: center;
+    }
+
+    .product-modal-content img {
+        max-width: 60%; /* Adjust image size in modal */
+        margin-bottom: 20px;
+    }
+
+    .product-details h3 {
+        font-size: 1.5em; /* Smaller font for title */
+    }
+
+    .product-details p,
+    .product-details li {
+        font-size: 0.9em; /* Smaller font for description/specs */
+    }
+
+    .product-details strong {
+        font-size: 1.2em; /* Smaller font for price */
+    }
+}
+
+/* For very small screens (e.g., mobile phones) */
+@media (max-width: 480px) {
+    .product {
+        width: 140px; /* Even smaller product cards */
+        padding: 8px;
+    }
+
+    .product-row {
+        gap: 15px; /* Even smaller gap */
+    }
+
+    .product img {
+        max-width: 80%; /* Adjust image in very small products */
+    }
+
+    .add-to-cart-btn {
+        padding: 6px 10px; /* Smaller button padding */
+        font-size: 0.9em;
+    }
+}

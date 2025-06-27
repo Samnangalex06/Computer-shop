@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+</head>
+<body>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>About Us - Computer Shop</title>
+      <link rel="stylesheet" href="Home.css"> <style>
+          .about-content {
+              max-width: 800px;
+              margin: 40px auto;
+              padding: 20px;
+              background-color: #f9f9f9;
+              border-radius: 8px;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+              line-height: 1.6;
+              color: #333;
+          }
+          .about-content h1, .about-content h2 {
+              color: #3A59D1;
+              margin-bottom: 15px;
+          }
+          .about-content p {
+              margin-bottom: 10px;
+          }
+          .contact-info {
+              margin-top: 20px;
+              padding-top: 15px;
+              border-top: 1px solid #eee;
+          }
+          .contact-info p {
+              margin-bottom: 5px;
+          }
+      </style>
+  </head>
+  <body>
+      <div id="header-placeholder"></div>
+  
+      <div class="about-content">
+          <h1>About Our Computer Shop</h1>
+          <p>Welcome to Computer Shop! We are dedicated to providing the latest and greatest in computer technology, accessories, and components to meet all your computing needs. Whether you're a casual user, a hardcore gamer, or a professional in need of high-performance machines, we have something for everyone.</p>
+          <p>Our mission is to offer high-quality products at competitive prices, backed by excellent customer service. We believe in building lasting relationships with our customers by ensuring satisfaction and providing expert advice.</p>
+          <p>Explore our wide range of laptops, desktops, CPUs, GPUs, RAM, motherboards, and cases from leading brands like MSI, ROG, ASUS, and ACER.</p>
+  
+          <div class="contact-info">
+              <h2>Contact Us</h2>
+              <p><strong>Phone:</strong> 095 338 012</p>
+              <p><strong>Email:</strong> samnangalex123@gmail.com</p>
+              <p><strong>Address:</strong> Chamkarmon, Phnom Penh, Cambodia</p>
+              <p>Connect with us on social media:</p>
+              <p>
+                  <a href="https://www.facebook.com/samnang.alex.5/" target="_blank">Facebook</a> |
+                  <a href="https://t.me/I2GIC2" target="_blank">Telegram</a>
+              </p>
+          </div>
+      </div>
+  
+      <script>
+          fetch("header.html")
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById("header-placeholder").innerHTML = data;
+          
+              const toggle = document.getElementById("category-toggle");
+              const menu = document.getElementById("category-menu");
+          
+              toggle?.addEventListener("click", () => {
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+              });
+          
+              document.addEventListener("click", (e) => {
+                if (!document.getElementById("category").contains(e.target)) {
+                  menu.style.display = "none";
+                }
+              });
+            });
+      </script>
+
+</body>
+</html>
